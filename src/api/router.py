@@ -19,7 +19,7 @@ def root() -> dict:
     response_model=str,
     # TODO: add error responses=
 )
-async def get_recipe(location: str) -> str:
+def get_recipe(location: str) -> str:
     response = services.recipe.get_recipe(location)
     print(response)
     return response
