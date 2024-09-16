@@ -1,0 +1,31 @@
+[build-system]
+build-backend = "hatchling.build"
+requires = ["hatchling"]
+
+[project]
+name = "cookin"
+version = "0.1.0"
+description = "Tech Test DigitalKin"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi[standard]",
+    "openai",
+    "python-dotenv",
+]
+
+[project.optional-dependencies]
+quality = [
+    "mypy",
+    "pre-commit",
+    "ruff>=0.6.5",
+    "toml-sort",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/api"]
+
+[tool.ruff]
+indent-width = 4
+line-length = 88
+target-version = "py312"
