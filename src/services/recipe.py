@@ -16,6 +16,7 @@ client = openai.OpenAI(api_key=openai_key)
 
 def get_recipe(city: str) -> str:
     weather: dict = services.meteo.get_weather(city)
+    country = weather["nearest_area"][0]["country"][0]
     weather_description: str = weather["current_condition"][0]["weatherDesc"][0][
         "value"
     ]
@@ -29,7 +30,7 @@ def get_recipe(city: str) -> str:
             {
                 "role": "system",
                 "content": f"You're from {city} region, deeply connected to the local traditions and culture. "
-                f"You speak with local expressions. Explain you in the country language of {city}. "
+                f"You speak with local expressions. Explain you in the {country} language. "
                 f"The weather is {weather_description}, max temperature of the day {temperature} celsius degrees, "
                 f"with a wind at {wind_speed} kmph and {humidity}% of humidity.",
             },
