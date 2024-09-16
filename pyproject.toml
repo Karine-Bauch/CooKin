@@ -12,6 +12,7 @@ dependencies = [
     "fastapi[standard]",
     "openai",
     "python-dotenv",
+    "requests",
 ]
 
 [project.optional-dependencies]
