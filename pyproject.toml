@@ -21,6 +21,7 @@ quality = [
     "pre-commit",
     "ruff>=0.6.5",
     "toml-sort",
+    "isort",
 ]
 test = [
     "pytest",
