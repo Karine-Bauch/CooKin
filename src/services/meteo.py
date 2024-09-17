@@ -1,6 +1,6 @@
 import httpx
 
-weather_api = "https://wttr.in/test/"
+weather_api = "https://wttr.in/"
 
 
 def get_weather(location: str) -> dict:
