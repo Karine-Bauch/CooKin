@@ -9,14 +9,13 @@ dotenv.load_dotenv()
 
 
 openai_key = os.getenv("OPENAI_API_KEY")
-print(openai_key)
 
 client = openai.OpenAI(api_key=openai_key)
 
 
 def get_recipe(city: str) -> str:
     weather: dict = services.meteo.get_weather(city)
-    country = weather["nearest_area"][0]["country"][0]
+    country = weather["nearest_area"][0]["country"][0]["value"]
     weather_description: str = weather["current_condition"][0]["weatherDesc"][0][
         "value"
     ]
@@ -26,11 +25,12 @@ def get_recipe(city: str) -> str:
 
     completion = client.chat.completions.create(
         model="gpt-4o-mini",
+        temperature=0.5,
         messages=[
             {
                 "role": "system",
                 "content": f"You're from {city} region, deeply connected to the local traditions and culture. "
-                f"You speak with local expressions. Explain you in the {country} language. "
+                f"Explain you in the {country} language with a lot of local expressions. "
                 f"The weather is {weather_description}, max temperature of the day {temperature} celsius degrees, "
                 f"with a wind at {wind_speed} kmph and {humidity}% of humidity.",
             },
@@ -40,9 +40,8 @@ def get_recipe(city: str) -> str:
             },
         ],
     )
-    print(completion)
     return completion.choices[0].message.content
 
 
 if __name__ == "__main__":
-    print(get_recipe("Bordeaux"))
+    print(get_recipe("Marseille"))
