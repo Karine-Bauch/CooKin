@@ -1,9 +1,11 @@
 import os
 
+import httpx
 import openai
 import dotenv
 
 import services.meteo
+import services.exc
 
 dotenv.load_dotenv()
 
@@ -14,14 +16,21 @@ client = openai.OpenAI(api_key=openai_key)
 
 
 def get_recipe(city: str) -> str:
-    weather: dict = services.meteo.get_weather(city)
-    country = weather["nearest_area"][0]["country"][0]["value"]
-    weather_description: str = weather["current_condition"][0]["weatherDesc"][0][
-        "value"
-    ]
-    temperature: str = weather["current_condition"][0]["temp_C"]
-    humidity: str = weather["current_condition"][0]["humidity"]
-    wind_speed: str = weather["current_condition"][0]["windspeedKmph"]
+    try:
+        weather: dict = services.meteo.get_weather(city)
+        country = weather["nearest_area"][0]["country"][0]["value"]
+        weather_description: str = weather["current_condition"][0]["weatherDesc"][0][
+            "value"
+        ]
+        temperature: str = weather["current_condition"][0]["temp_C"]
+        humidity: str = weather["current_condition"][0]["humidity"]
+        wind_speed: str = weather["current_condition"][0]["windspeedKmph"]
+    except httpx.HTTPError as e:
+        raise services.exc.RecipeNotFound(
+            f"Recipe not Found for this location: {city}. "
+            f"{e}"
+        )
+
 
     completion = client.chat.completions.create(
         model="gpt-4o-mini",
@@ -40,6 +49,7 @@ def get_recipe(city: str) -> str:
             },
         ],
     )
+
     return completion.choices[0].message.content
 
 
