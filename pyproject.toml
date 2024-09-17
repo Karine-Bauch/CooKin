@@ -12,7 +12,7 @@ dependencies = [
     "fastapi[standard]",
     "openai",
     "python-dotenv",
-    "requests",
+    "httpx",
 ]
 
 [project.optional-dependencies]
@@ -21,6 +21,10 @@ quality = [
     "pre-commit",
     "ruff>=0.6.5",
     "toml-sort",
+]
+test = [
+    "pytest",
+    "pytest-mock",
 ]
 
 [tool.hatch.build.targets.wheel]
