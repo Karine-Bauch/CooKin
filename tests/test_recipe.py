@@ -3,8 +3,6 @@ import pytest
 import services.recipe
 import services.weather
 
-import pytest
-
 
 @pytest.mark.usefixtures("mock_get_weather")
 def test_recipe():

@@ -1,7 +1,7 @@
 import fastapi
 
-import services.recipe
 import services.exc
+import services.recipe
 
 app = fastapi.FastAPI()
 
@@ -17,12 +17,13 @@ def root() -> dict:
     status_code=fastapi.status.HTTP_200_OK,
     response_model=str,
     responses={
-        fastapi.status.HTTP_500_INTERNAL_SERVER_ERROR: {"description": "Internal Server Error"},
+        fastapi.status.HTTP_500_INTERNAL_SERVER_ERROR: {
+            "description": "Internal Server Error"
+        },
         fastapi.status.HTTP_404_NOT_FOUND: {"description": "Recipe Not Found"},
-    }
+    },
 )
 def get_recipe(location: str) -> str:
     response = services.recipe.get_recipe(location)
     print(response)
     return response
-

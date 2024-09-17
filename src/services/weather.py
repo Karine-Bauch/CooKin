@@ -4,7 +4,7 @@ weather_api = "https://wttr.in/"
 
 
 def get_weather(location: str) -> dict:
-    weather_url = f"{weather_api}{location}?format=j1" # font case managed by wttr API
+    weather_url = f"{weather_api}{location}?format=j1"  # font case managed by wttr API
 
     try:
         weather = httpx.get(weather_url)

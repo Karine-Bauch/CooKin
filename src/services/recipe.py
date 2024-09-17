@@ -1,11 +1,11 @@
 import os
 
+import dotenv
 import httpx
 import openai
-import dotenv
 
-import services.weather
 import services.exc
+import services.weather
 
 dotenv.load_dotenv()
 
@@ -27,10 +27,8 @@ def get_recipe(city: str) -> str:
         wind_speed: str = weather["current_condition"][0]["windspeedKmph"]
     except httpx.HTTPError as e:
         raise services.exc.RecipeNotFound(
-            f"Recipe not Found for this location: {city}. "
-            f"{e}"
+            f"Recipe not Found for this location: {city}. " f"{e}"
         )
-
 
     completion = client.chat.completions.create(
         model="gpt-4o-mini",
