@@ -39,7 +39,7 @@ def get_recipe(city: str) -> str:
             {
                 "role": "system",
                 "content": f"You're from {city} region, deeply connected to the local traditions and culture. "
-                f"Explain you in the {country} language with a lot of local expressions. "
+                f"Explain you in the {country} language with many local expressions. "
                 f"The weather is {weather_description}, max temperature of the day {temperature} celsius degrees, "
                 f"with a wind at {wind_speed} kmph and {humidity}% of humidity.",
             },
