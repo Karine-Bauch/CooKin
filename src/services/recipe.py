@@ -4,7 +4,7 @@ import httpx
 import openai
 import dotenv
 
-import services.meteo
+import services.weather
 import services.exc
 
 dotenv.load_dotenv()
@@ -17,8 +17,8 @@ client = openai.OpenAI(api_key=openai_key)
 
 def get_recipe(city: str) -> str:
     try:
-        weather: dict = services.meteo.get_weather(city)
-        country = weather["nearest_area"][0]["country"][0]["value"]
+        weather: dict = services.weather.get_weather(city)
+        country: str = weather["nearest_area"][0]["country"][0]["value"]
         weather_description: str = weather["current_condition"][0]["weatherDesc"][0][
             "value"
         ]
