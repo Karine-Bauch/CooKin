@@ -5,9 +5,9 @@ import services.weather
 
 
 def test_check_city() -> None:
-    assert services.weather.check_city('London') == True
-    assert services.weather.check_city('Aix en Provence') == True
-    assert services.weather.check_city('this is not a city') == False
+    assert services.weather.check_city("London")
+    assert services.weather.check_city("Aix en Provence")
+    assert services.weather.check_city("this is not a city")
 
 
 def test_weather_return_dict() -> None:
