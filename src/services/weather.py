@@ -20,7 +20,7 @@ def weather_api_call(location):
         weather_url = f"{weather_api}{location}?format=j1"
     else:
         raise KeyError(f'Location "{location}" not found.')
-    return httpx.get(weather_url).json
+    return httpx.get(weather_url).json()
 
 
 def get_weather(location) -> dict:
