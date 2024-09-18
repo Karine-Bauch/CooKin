@@ -10,12 +10,12 @@ def test_check_city() -> None:
     assert services.weather.check_city("this is not a city")
 
 
-def test_weather_return_dict() -> None:
+def test_get_weather_dict() -> None:
     weather = services.weather.get_weather("London")
     assert isinstance(weather, dict)
 
 
-def test_weather_has_fields() -> None:
+def test_weather_has_needed_fields() -> None:
     weather = services.weather.get_weather("London")
     assert weather["nearest_area"][0]["country"][0]["value"]
     assert weather["current_condition"][0]["weatherDesc"][0]["value"]
@@ -25,15 +25,15 @@ def test_weather_has_fields() -> None:
 
 
 @pytest.mark.usefixtures("mock_get_weather")
-def test_prompt() -> None:
+def test_prompt_creation() -> None:
     weather = services.weather.get_weather("London")
     prompt = services.recipe.create_prompt(
         "London",
-            weather["nearest_area"][0]["country"][0]["value"],
-            weather["current_condition"][0]["weatherDesc"][0]["value"],
-            weather["current_condition"][0]["temp_C"],
-            weather["current_condition"][0]["humidity"],
-            weather["current_condition"][0]["windspeedKmph"],
+        weather["nearest_area"][0]["country"][0]["value"],
+        weather["current_condition"][0]["weatherDesc"][0]["value"],
+        weather["current_condition"][0]["temp_C"],
+        weather["current_condition"][0]["humidity"],
+        weather["current_condition"][0]["windspeedKmph"],
     )
     assert len(prompt) > 0
     assert weather["nearest_area"][0]["country"][0]["value"] in prompt
@@ -44,7 +44,7 @@ def test_prompt() -> None:
 
 
 @pytest.mark.usefixtures("mock_get_weather")
-def test_recipe() -> None:
+def test_get_recipe_from_ai() -> None:
     recipe = services.recipe.get_recipe("Paris")
     assert isinstance(recipe, str)
     assert len(recipe) > 0
