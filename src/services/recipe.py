@@ -6,6 +6,7 @@ import openai
 
 import services.exc
 import services.weather
+from services import utils
 
 dotenv.load_dotenv()
 
@@ -27,6 +28,23 @@ def create_prompt(
     return prompt
 
 
+def openai_api_call(prompt):
+    return client.chat.completions.create(
+        model="gpt-4o-mini",
+        temperature=1,
+        messages=[
+            {
+                "role": "system",
+                "content": prompt,
+            },
+            {
+                "role": "user",
+                "content": " Give me an original recipe perfect for the weather.",
+            },
+        ],
+    )
+
+
 def get_recipe(city: str) -> str:
     try:
         weather: dict = services.weather.get_weather(city)
@@ -46,21 +64,12 @@ def get_recipe(city: str) -> str:
     openai_prompt: str = create_prompt(
         city, country, humidity, temperature, weather_description, wind_speed
     )
-
-    completion: openai.ChatCompletion = client.chat.completions.create(
-        model="gpt-4o-mini",
-        temperature=1,
-        messages=[
-            {
-                "role": "system",
-                "content": openai_prompt,
-            },
-            {
-                "role": "user",
-                "content": " Give me an original recipe perfect for the weather.",
-            },
-        ],
-    )
+    try:
+        completion = utils.retry(
+            openai_api_call, lambda response: response, openai_prompt
+        )
+    except TimeoutError as e:
+        raise TimeoutError from e
 
     return completion.choices[0].message.content
 
