@@ -20,7 +20,7 @@ pip install -e .[test,quality]
 
 ## How to use the project with OpenApi Doc
 
-Run the API
+Run the API (at the root of the project)
 ```bash
 fastapi dev src/api/router.py
 ```
@@ -31,3 +31,20 @@ Click on **"try it out"**
 Enter a location and click on **"Execute"**
 
 In the response body, find the weather-appropriate recipe.
+
+## How to use the project with CLI Typer
+
+Run the API (at the root of the project)
+```bash
+fastapi dev src/api/router.py
+```
+
+In a new Terminal window, run the command (at the root of the project)
+```bash
+python src/cli/main.py recipe <location>
+```
+
+Need help ? Run
+```bash
+python src/cli/main.py recipe --help
+```
