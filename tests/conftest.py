@@ -24,9 +24,9 @@ def mock_get_weather(mocker) -> None:
 
 @pytest.fixture
 def mock_weather_api_call(mocker) -> None:
-    mocker.patch("services.weather.get_weather", return_value=True)
+    mocker.patch("services.weather.weather_api_call", return_value=fake_weather)
 
 
 @pytest.fixture
 def mock_weather_api_call_fail(mocker) -> None:
-    mocker.patch("services.weather.get_weather", return_value=None)
+    mocker.patch("services.weather.weather_api_call", return_value=None)
