@@ -1,6 +1,6 @@
 import pytest
 
-FAKE_WEATHER = {
+fake_weather: dict = {
     "current_condition": [
         {
             "humidity": "73",
@@ -19,4 +19,4 @@ FAKE_WEATHER = {
 
 @pytest.fixture
 def mock_get_weather(mocker) -> None:
-    mocker.patch("services.weather.get_weather", return_value=FAKE_WEATHER)
+    mocker.patch("services.weather.get_weather", return_value=fake_weather)
