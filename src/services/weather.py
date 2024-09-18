@@ -1,7 +1,6 @@
-import time
-import typing
-
 import httpx
+
+from services import utils
 
 weather_api = "https://wttr.in/"
 
@@ -16,32 +15,20 @@ def check_city(city):
     return False
 
 
-INCREMENTAL_WAIT = [1, 3, 5, 8, 13]
-
-def retry(api_call: typing.Callable, predicate: typing.Callable, *args, **kwargs):
-    for wait in INCREMENTAL_WAIT:
-        weather = api_call(*args, **kwargs)
-        if predicate(weather):
-            return weather
-        print(f"Retry, waiting {wait} seconds")
-        time.sleep(wait)
-    raise TimeoutError
-
-
 def weather_api_call(location):
     if check_city(location):
         weather_url = f"{weather_api}{location}?format=j1"
     else:
         raise KeyError(f'Location "{location}" not found.')
-    return httpx.get(weather_url)
+    return httpx.get(weather_url).json
+
 
 def get_weather(location) -> dict:
     try:
-        weather = retry(weather_api_call, lambda response: response, location)
+        weather = utils.retry(weather_api_call, lambda response: response, location)
     except TimeoutError as e:
         raise TimeoutError from e
-
-    return weather.json()
+    return weather
 
 
 if __name__ == "__main__":
