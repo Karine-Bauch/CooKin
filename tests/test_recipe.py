@@ -50,14 +50,26 @@ def test_get_recipe_from_ai() -> None:
     assert len(recipe) > 0
 
 
-@pytest.mark.usefixtures("mock_weather_api_call")
+@pytest.mark.usefixtures("mock_api_call")
 def test_retry_weather_api_call():
     weather = services.weather.get_weather("London")
     assert isinstance(weather, dict)
 
 
-@pytest.mark.usefixtures("mock_weather_api_call_fail")
+@pytest.mark.usefixtures("mock_api_call_fail")
 def test_retry_weather_api_call_fail():
     with pytest.raises(TimeoutError):
         services.weather.get_weather("London")
 
+
+@pytest.mark.usefixtures("mock_api_call")
+def test_retry_openai_api_call():
+    completion = services.recipe.get_recipe("London")
+    assert isinstance(completion, str)
+    assert len(completion) > 0
+
+
+@pytest.mark.usefixtures("mock_api_call_fail")
+def test_retry_openai_api_call_fail():
+    with pytest.raises(TimeoutError):
+        services.recipe.get_recipe("London")
