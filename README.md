@@ -18,7 +18,7 @@ pip install -e .[test,quality]
 
 3. Add a .env file with your OpenAI API key, seeing .env.example for sample
 
-## How to use the project with OpenApi Doc
+## How to use the project in OpenApi Doc
 
 Run the API (at the root of the project)
 ```bash
@@ -32,7 +32,7 @@ Enter a location and click on **"Execute"**
 
 In the response body, find the weather-appropriate recipe.
 
-## How to use the project with CLI Typer
+## How to use the project in CLI (Typer)
 
 Run the API (at the root of the project)
 ```bash
