@@ -70,7 +70,6 @@ def get_recipe(city: str) -> str:
         )
     except TimeoutError as e:
         raise TimeoutError from e
-
     return completion.choices[0].message.content
 
 
