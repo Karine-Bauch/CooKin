@@ -7,7 +7,7 @@ import services.weather
 def test_check_city() -> None:
     assert services.weather.check_city("London")
     assert services.weather.check_city("Aix en Provence")
-    assert services.weather.check_city("this is not a city")
+    assert not services.weather.check_city("this is not a city")
 
 
 def test_get_weather_dict() -> None:
