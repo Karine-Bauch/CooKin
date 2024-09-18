@@ -15,6 +15,14 @@ openai_key = os.getenv("OPENAI_API_KEY")
 client = openai.OpenAI(api_key=openai_key)
 
 
+def create_prompt(city, country, humidity, temperature, weather_description, wind_speed):
+    prompt = (f"You're from {city} region, deeply connected to the local traditions and culture. "
+              f"Explain you in the {country} language with many local expressions. "
+              f"The weather is {weather_description}, max temperature of the day {temperature} celsius degrees, "
+              f"with a wind at {wind_speed} kmph and {humidity}% of humidity.")
+    return prompt
+
+
 def get_recipe(city: str) -> str:
     try:
         weather: dict = services.weather.get_weather(city)
@@ -32,6 +40,7 @@ def get_recipe(city: str) -> str:
         )
 
     openai_prompt = create_prompt(city, country, humidity, temperature, weather_description, wind_speed)
+
     print(openai_prompt)
     completion = client.chat.completions.create(
         model="gpt-4o-mini",
@@ -50,13 +59,6 @@ def get_recipe(city: str) -> str:
 
     return completion.choices[0].message.content
 
-
-def create_prompt(city, country, humidity, temperature, weather_description, wind_speed):
-    prompt = (f"You're from {city} region, deeply connected to the local traditions and culture. "
-              f"Explain you in the {country} language with many local expressions. "
-              f"The weather is {weather_description}, max temperature of the day {temperature} celsius degrees, "
-              f"with a wind at {wind_speed} kmph and {humidity}% of humidity.")
-    return prompt
 
 
 if __name__ == "__main__":
