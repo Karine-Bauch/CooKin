@@ -39,10 +39,9 @@ def get_recipe(city: str) -> str:
             f"Recipe not Found for this location: {city}. " f"{e}"
         )
 
-    openai_prompt = create_prompt(city, country, humidity, temperature, weather_description, wind_speed)
+    openai_prompt: str = create_prompt(city, country, humidity, temperature, weather_description, wind_speed)
 
-    print(openai_prompt)
-    completion = client.chat.completions.create(
+    completion: openai.ChatCompletion = client.chat.completions.create(
         model="gpt-4o-mini",
         temperature=0.5,
         messages=[
