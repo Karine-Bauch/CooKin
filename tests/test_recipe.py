@@ -48,3 +48,15 @@ def test_get_recipe_from_ai() -> None:
     recipe = services.recipe.get_recipe("Paris")
     assert isinstance(recipe, str)
     assert len(recipe) > 0
+
+
+@pytest.mark.usefixtures("mock_weather_api_call")
+def test_retry():
+    services.weather.get_weather("London")
+    assert TimeoutError
+
+
+@pytest.mark.usefixtures("mock_weather_api_call_fail")
+def test_retry_fail():
+    services.weather.get_weather("London")
+    assert TimeoutError
