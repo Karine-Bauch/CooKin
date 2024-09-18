@@ -61,4 +61,5 @@ def get_recipe(city: str) -> str:
 
 
 if __name__ == "__main__":
+    print(create_prompt("Paris", "France", 80, 25, "partially cloudy", 12))
     print(get_recipe("Marseille"))
