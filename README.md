@@ -41,10 +41,10 @@ fastapi dev src/api/router.py
 
 In a new Terminal window, run the command (at the root of the project)
 ```bash
-python src/cli/main.py recipe <location>
+weather_recipe <location>
 ```
 
 Need help ? Run
 ```bash
-python src/cli/main.py recipe --help
+python weather_recipe --help
 ```
