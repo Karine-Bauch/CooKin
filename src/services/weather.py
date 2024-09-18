@@ -2,12 +2,16 @@ import httpx
 
 weather_api = "https://wttr.in/"
 
+
 def check_city(city):
-    open_streetmap_url = f"https://nominatim.openstreetmap.org/search?city={city}&format=json"
+    open_streetmap_url = (
+        f"https://nominatim.openstreetmap.org/search?city={city}&format=json"
+    )
     response = httpx.get(open_streetmap_url).json()
     if response:
         return True
     return False
+
 
 def get_weather(location: str) -> dict:
     if check_city(location):
@@ -21,7 +25,6 @@ def get_weather(location: str) -> dict:
         raise TimeoutError from e
 
     return weather.json()
-
 
 
 if __name__ == "__main__":
