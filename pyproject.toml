@@ -29,6 +29,9 @@ test = [
     "pytest-mock",
 ]
 
+[project.scripts]
+weather_recipe = "cli.main:app"
+
 [tool.hatch.build.targets.wheel]
 packages = ["src/api"]
 
