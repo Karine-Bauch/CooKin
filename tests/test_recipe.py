@@ -51,12 +51,12 @@ def test_get_recipe_from_ai() -> None:
 
 
 @pytest.mark.usefixtures("mock_weather_api_call")
-def test_retry():
+def test_retry_weather_api_call():
     services.weather.get_weather("London")
     assert TimeoutError
 
 
 @pytest.mark.usefixtures("mock_weather_api_call_fail")
-def test_retry_fail():
+def test_retry_weather_api_call_fail():
     services.weather.get_weather("London")
     assert TimeoutError
