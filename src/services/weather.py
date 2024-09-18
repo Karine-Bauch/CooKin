@@ -8,11 +8,15 @@ def get_weather(location: str) -> dict:
 
     try:
         weather = httpx.get(weather_url)
-        weather.raise_for_status()
-        return weather.json()
-    except httpx.HTTPStatusError as e:
-        raise e
+    except TimeoutError as e:
+        raise TimeoutError from e
+
+    return weather.json()
+
 
 
 if __name__ == "__main__":
-    print(get_weather("Bordeaux"))
+    print(check_city("London"))
+    print(get_weather("London"))
+    print(check_city("58913784137849318840134134"))
+    print(get_weather("58913784137849318840134134"))
