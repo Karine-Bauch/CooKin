@@ -1,6 +1,6 @@
-import typer
 import rich
 import rich.progress
+import typer
 
 import services.recipe
 
