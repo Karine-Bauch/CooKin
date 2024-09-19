@@ -35,7 +35,7 @@ def openai_api_call(prompt):
             {
                 "role": "system",
                 "content": "You're Yoda. You must explain like him for all your answer."
-                           "For the entire answer you must explain like Yoda",
+                           "For the entire answer you must explain like Yoda. Write in French",
             },
             {
                 "role": "user",
