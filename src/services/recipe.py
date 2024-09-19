@@ -17,13 +17,12 @@ client = openai.OpenAI(api_key=openai_key)
 
 
 def create_prompt(
-    city, country, humidity, temperature, weather_description, wind_speed
+    humidity, temperature, weather_description, wind_speed
 ) -> str:
     prompt = (
-        f"You're from {city}, deeply connected to the local traditions and culture. "
-        f"Explain you in the {country} language with many local expressions of {city}. "
         f"The weather is {weather_description}, max temperature of the day is {temperature} celsius degrees, "
-        f"with a wind at {wind_speed} kmph and {humidity}% of humidity."
+        f"with a wind at {wind_speed} kmph and {humidity}% of humidity. "
+        f"Give me a recipe adapted to the weather."
     )
     return prompt
 
@@ -35,11 +34,12 @@ def openai_api_call(prompt):
         messages=[
             {
                 "role": "system",
-                "content": prompt,
+                "content": "You're Yoda. You must explain like him for all your answer."
+                           "For the entire answer you must explain like Yoda",
             },
             {
                 "role": "user",
-                "content": " Give me an original recipe perfect for the weather.",
+                "content": prompt,
             },
         ],
     )
@@ -48,7 +48,6 @@ def openai_api_call(prompt):
 def get_recipe(city: str) -> str:
     try:
         weather: dict = services.weather.get_weather(city)
-        country: str = weather["nearest_area"][0]["country"][0]["value"]
         weather_description: str = weather["current_condition"][0]["weatherDesc"][0][
             "value"
         ]
@@ -62,7 +61,7 @@ def get_recipe(city: str) -> str:
         )
 
     openai_prompt: str = create_prompt(
-        city, country, humidity, temperature, weather_description, wind_speed
+        humidity, temperature, weather_description, wind_speed
     )
     try:
         completion = utils.retry(
@@ -74,5 +73,5 @@ def get_recipe(city: str) -> str:
 
 
 if __name__ == "__main__":
-    print(create_prompt("Paris", "France", 80, 25, "partially cloudy", 12))
+    print(create_prompt(80, 25, "partially cloudy", 12))
     print(get_recipe("Marseille"))

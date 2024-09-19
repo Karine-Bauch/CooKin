@@ -17,7 +17,6 @@ def test_get_weather_dict() -> None:
 
 def test_weather_has_needed_fields() -> None:
     weather = services.weather.get_weather("London")
-    assert weather["nearest_area"][0]["country"][0]["value"]
     assert weather["current_condition"][0]["weatherDesc"][0]["value"]
     assert weather["current_condition"][0]["temp_C"]
     assert weather["current_condition"][0]["humidity"]
@@ -28,15 +27,12 @@ def test_weather_has_needed_fields() -> None:
 def test_prompt_creation() -> None:
     weather = services.weather.get_weather("London")
     prompt = services.recipe.create_prompt(
-        "London",
-        weather["nearest_area"][0]["country"][0]["value"],
         weather["current_condition"][0]["weatherDesc"][0]["value"],
         weather["current_condition"][0]["temp_C"],
         weather["current_condition"][0]["humidity"],
         weather["current_condition"][0]["windspeedKmph"],
     )
     assert len(prompt) > 0
-    assert weather["nearest_area"][0]["country"][0]["value"] in prompt
     assert weather["current_condition"][0]["weatherDesc"][0]["value"] in prompt
     assert weather["current_condition"][0]["temp_C"] in prompt
     assert weather["current_condition"][0]["humidity"] in prompt
