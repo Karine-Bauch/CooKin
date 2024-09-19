@@ -1,6 +1,6 @@
 import httpx
 
-from services import utils
+import services.utils
 
 weather_api = "https://wttr.in/"
 
@@ -25,7 +25,9 @@ def weather_api_call(location) -> dict:
 
 def get_weather(location) -> dict:
     try:
-        weather = utils.retry(weather_api_call, lambda response: response, location)
+        weather = services.utils.retry(
+            weather_api_call, lambda response: response, location
+        )
     except TimeoutError as e:
         raise TimeoutError from e
     return weather

@@ -6,8 +6,8 @@ import openai
 import openai.types.chat
 
 import services.exc
+import services.utils
 import services.weather
-from services import utils
 
 dotenv.load_dotenv()
 
@@ -64,7 +64,7 @@ def get_recipe(city: str) -> str | None:
     )
 
     try:
-        completion: openai.types.chat.ChatCompletion = utils.retry(
+        completion: openai.types.chat.ChatCompletion = services.utils.retry(
             openai_api_call, lambda response: response, openai_prompt
         )
     except TimeoutError as e:
