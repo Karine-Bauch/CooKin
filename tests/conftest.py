@@ -13,11 +13,6 @@ fake_weather: dict = {
             "windspeedKmph": "22",
         }
     ],
-    "nearest_area": [
-        {
-            "country": [{"value": "France"}],
-        }
-    ],
 }
 
 fake_completion = ChatCompletion(
