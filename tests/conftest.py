@@ -15,7 +15,7 @@ fake_weather: dict = {
     ],
 }
 
-fake_completion = ChatCompletion(
+fake_completion: ChatCompletion = ChatCompletion(
     id="chatcmpl-A8qL8QM2P9R61wVlaKxFy54QfA1FG",
     choices=[
         Choice(

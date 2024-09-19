@@ -8,7 +8,7 @@ app = typer.Typer()
 
 
 @app.command()
-def recipe(location: str):
+def recipe(location: str) -> None:
     """
     Send a recipe weather-appropriate for a LOCATION
     """

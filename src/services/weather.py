@@ -5,7 +5,7 @@ from services import utils
 weather_api = "https://wttr.in/"
 
 
-def check_city(city):
+def check_city(city) -> bool:
     open_streetmap_url = (
         f"https://nominatim.openstreetmap.org/search?city={city}&format=json"
     )
@@ -15,7 +15,7 @@ def check_city(city):
     return False
 
 
-def weather_api_call(location):
+def weather_api_call(location) -> dict:
     if check_city(location):
         weather_url = f"{weather_api}{location}?format=j1"
     else:
