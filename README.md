@@ -46,5 +46,5 @@ weather_recipe <location>
 
 Need help ? Run
 ```bash
-python weather_recipe --help
+weather_recipe --help
 ```
