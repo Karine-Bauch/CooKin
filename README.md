@@ -2,7 +2,7 @@
 
 ## Description
 
-CooKin is a small API to obtain a weather-appropriate recipe depending on the location you send. 
+CooKin is a project to obtain a weather-appropriate recipe depending on the location you send. 
 
 ## How to install the project
 
