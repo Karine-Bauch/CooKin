@@ -1,2 +1,2 @@
-class RecipeNotFound(Exception):
+class NotFound(Exception):
     pass

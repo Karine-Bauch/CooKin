@@ -1,3 +1,4 @@
+import httpx
 import pytest
 from openai.types import CompletionUsage
 from openai.types.chat import ChatCompletion, ChatCompletionMessage
@@ -58,5 +59,5 @@ def mock_api_call(mocker) -> None:
 
 @pytest.fixture
 def mock_api_call_fail(mocker) -> None:
-    mocker.patch("services.weather.weather_api_call", return_value=None)
+    mocker.patch("services.weather.httpx.get", side_effect=httpx.TimeoutException("Timeout"))
     mocker.patch("services.recipe.openai_api_call", return_value=None)
