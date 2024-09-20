@@ -34,11 +34,6 @@ In the response body, find the weather-appropriate recipe.
 
 ## How to use the project in CLI (Typer)
 
-Run the API (at the root of the project)
-```bash
-fastapi dev src/api/router.py
-```
-
 In a new Terminal window, run the command (at the root of the project)
 ```bash
 weather_recipe <location>
