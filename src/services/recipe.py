@@ -1,7 +1,6 @@
 import os
 
 import dotenv
-import httpx
 import openai
 import openai.types.chat
 
@@ -45,30 +44,23 @@ def openai_api_call(prompt) -> openai.types.chat.ChatCompletion:
 
 
 def get_recipe(city: str) -> str | None:
-    try:
-        weather: dict = services.weather.get_weather(city)
-        weather_description: str = weather["current_condition"][0]["weatherDesc"][0][
-            "value"
-        ]
-        temperature: str = weather["current_condition"][0]["temp_C"]
-        humidity: str = weather["current_condition"][0]["humidity"]
-        wind_speed: str = weather["current_condition"][0]["windspeedKmph"]
+    weather: dict = services.weather.get_weather(city)
 
-    except httpx.HTTPError as e:
-        raise services.exc.RecipeNotFound(
-            f"Recipe not Found for this location: {city}. " f"{e}"
-        )
+    weather_description: str = weather["current_condition"][0]["weatherDesc"][0][
+        "value"
+    ]
+    temperature: str = weather["current_condition"][0]["temp_C"]
+    humidity: str = weather["current_condition"][0]["humidity"]
+    wind_speed: str = weather["current_condition"][0]["windspeedKmph"]
 
     openai_prompt: str = create_prompt(
         humidity, temperature, weather_description, wind_speed
     )
 
-    try:
-        completion: openai.types.chat.ChatCompletion = services.utils.retry(
-            openai_api_call, lambda response: response, openai_prompt
-        )
-    except TimeoutError as e:
-        raise TimeoutError from e
+    completion: openai.types.chat.ChatCompletion = services.utils.retry(
+        openai_api_call, lambda response: response, openai_prompt
+    )
+
     return completion.choices[0].message.content
 
 
