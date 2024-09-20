@@ -1,10 +1,9 @@
 import httpx
-import openai
 import pytest
 
+import services.exc
 import services.recipe
 import services.weather
-import services.exc
 
 
 @pytest.mark.usefixtures("mock_open_streetmap_api_call_success")
@@ -43,26 +42,38 @@ def test_prompt_creation() -> None:
     assert weather["current_condition"][0]["windspeedKmph"] in prompt
 
 
-@pytest.mark.usefixtures("mock_open_streetmap_api_call_success", "mock_weather_api_call_success")
+@pytest.mark.usefixtures(
+    "mock_open_streetmap_api_call_success", "mock_weather_api_call_success"
+)
 def test_get_weather_success():
     weather = services.weather.get_weather("London")
     assert isinstance(weather, dict)
 
 
-@pytest.mark.usefixtures("mock_open_streetmap_api_call_success", "mock_weather_api_call_fail")
+@pytest.mark.usefixtures(
+    "mock_open_streetmap_api_call_success", "mock_weather_api_call_fail"
+)
 def test_get_weather_fail_with_retry():
     with pytest.raises(TimeoutError):
         services.weather.get_weather("London")
 
 
-@pytest.mark.usefixtures("mock_open_streetmap_api_call_success", "mock_weather_api_call_success", "mock_openai_api_call_success")
+@pytest.mark.usefixtures(
+    "mock_open_streetmap_api_call_success",
+    "mock_weather_api_call_success",
+    "mock_openai_api_call_success",
+)
 def test_get_recipe_success():
     completion = services.recipe.get_recipe("London")
     assert isinstance(completion, str)
     assert len(completion) > 0
 
 
-@pytest.mark.usefixtures("mock_open_streetmap_api_call_success", "mock_weather_api_call_success", "mock_openai_api_call_fail")
+@pytest.mark.usefixtures(
+    "mock_open_streetmap_api_call_success",
+    "mock_weather_api_call_success",
+    "mock_openai_api_call_fail",
+)
 def test_get_recipe_with_retry():
     with pytest.raises(TimeoutError):
         services.recipe.get_recipe("London")

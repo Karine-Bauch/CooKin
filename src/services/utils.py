@@ -8,7 +8,9 @@ import openai
 INCREMENTAL_WAIT = [1, 3, 5, 8, 13]
 
 
-def retry(api_call: typing.Callable, predicate: typing.Callable, *args, **kwargs) -> dict:
+def retry(
+    api_call: typing.Callable, predicate: typing.Callable, *args, **kwargs
+) -> dict:
     for wait in INCREMENTAL_WAIT:
         with contextlib.suppress(httpx.TimeoutException, openai.APITimeoutError):
             result = api_call(*args, **kwargs)

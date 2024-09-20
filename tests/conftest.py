@@ -1,13 +1,12 @@
+import unittest.mock
+
 import httpx
 import openai
 import pytest
-import unittest.mock
-
 from openai.types import CompletionUsage
 from openai.types.chat import ChatCompletion, ChatCompletionMessage
 from openai.types.chat.chat_completion import Choice
 from openai.types.completion_usage import CompletionTokensDetails
-
 
 fake_completion: ChatCompletion = ChatCompletion(
     id="chatcmpl-A8qL8QM2P9R61wVlaKxFy54QfA1FG",
@@ -106,12 +105,16 @@ def mock_open_streetmap_api_call_fail(mocker) -> None:
 
 @pytest.fixture
 def mock_weather_api_call_fail(mocker) -> None:
-    mocker.patch("services.weather.httpx.get", side_effect=httpx.TimeoutException("Timeout"))
+    mocker.patch(
+        "services.weather.httpx.get", side_effect=httpx.TimeoutException("Timeout")
+    )
 
 
 @pytest.fixture
 def mock_openai_api_call_fail(mocker) -> None:
     mocker.patch(
         "services.recipe.openai_api_call",
-        side_effect=openai.APITimeoutError(request=httpx.Request("GET", "https://example.com"))
+        side_effect=openai.APITimeoutError(
+            request=httpx.Request("GET", "https://example.com")
+        ),
     )
