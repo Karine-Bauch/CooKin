@@ -1,20 +1,13 @@
 import httpx
+import openai
 import pytest
+import unittest.mock
+
 from openai.types import CompletionUsage
 from openai.types.chat import ChatCompletion, ChatCompletionMessage
 from openai.types.chat.chat_completion import Choice
 from openai.types.completion_usage import CompletionTokensDetails
 
-fake_weather: dict = {
-    "current_condition": [
-        {
-            "humidity": "73",
-            "temp_C": "18",
-            "weatherDesc": [{"value": "Partly cloudy"}],
-            "windspeedKmph": "22",
-        }
-    ],
-}
 
 fake_completion: ChatCompletion = ChatCompletion(
     id="chatcmpl-A8qL8QM2P9R61wVlaKxFy54QfA1FG",
@@ -46,18 +39,79 @@ fake_completion: ChatCompletion = ChatCompletion(
 )
 
 
-@pytest.fixture
-def mock_get_weather(mocker) -> None:
-    mocker.patch("services.weather.get_weather", return_value=fake_weather)
+fake_weather: dict = {
+    "current_condition": [
+        {
+            "humidity": "73",
+            "temp_C": "18",
+            "weatherDesc": [{"value": "Partly cloudy"}],
+            "windspeedKmph": "22",
+        }
+    ],
+}
+
+
+### SUCCESS MOCK ###
+
+mock_weather_success = unittest.mock.Mock(spec=httpx.Response)
+mock_weather_success.status_code = 200
+mock_weather_success.json.return_value = {
+    "current_condition": [
+        {
+            "humidity": "73",
+            "temp_C": "18",
+            "weatherDesc": [{"value": "Partly cloudy"}],
+            "windspeedKmph": "22",
+        }
+    ],
+}
+
+mock_response_success = unittest.mock.Mock(spec=httpx.Response)
+mock_response_success.status_code = 200
+mock_response_success.json.return_value = {
+    "place_id": 243407805,
+}
 
 
 @pytest.fixture
-def mock_api_call(mocker) -> None:
-    mocker.patch("services.weather.weather_api_call", return_value=fake_weather)
+def mock_open_streetmap_api_call_success(mocker) -> None:
+    mocker.patch("services.weather.httpx.get", return_value=mock_response_success)
+
+
+@pytest.fixture
+def mock_weather_api_call_success(mocker) -> None:
+    mocker.patch("services.weather.httpx.get", return_value=mock_weather_success)
+
+
+@pytest.fixture
+def mock_openai_api_call_success(mocker) -> None:
     mocker.patch("services.recipe.openai_api_call", return_value=fake_completion)
 
 
+### FAIL MOCK ###
+
+mock_response_fail = unittest.mock.Mock(spec=httpx.Response)
+mock_response_fail.status_code = 400
+mock_response_fail.raise_for_status.side_effect = httpx.HTTPStatusError(
+    message="Not Found",
+    request=httpx.Request("GET", "https://example.com"),
+    response=mock_response_fail,
+)
+
+
 @pytest.fixture
-def mock_api_call_fail(mocker) -> None:
+def mock_open_streetmap_api_call_fail(mocker) -> None:
+    mocker.patch("services.weather.httpx.get", return_value=mock_response_fail)
+
+
+@pytest.fixture
+def mock_weather_api_call_fail(mocker) -> None:
     mocker.patch("services.weather.httpx.get", side_effect=httpx.TimeoutException("Timeout"))
-    mocker.patch("services.recipe.openai_api_call", return_value=None)
+
+
+@pytest.fixture
+def mock_openai_api_call_fail(mocker) -> None:
+    mocker.patch(
+        "services.recipe.openai_api_call",
+        side_effect=openai.APITimeoutError(request=httpx.Request("GET", "https://example.com"))
+    )
