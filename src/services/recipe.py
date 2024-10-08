@@ -42,7 +42,7 @@ def openai_api_call(prompt) -> openai.types.chat.ChatCompletion:
         ],
     )
 
-
+@services.utils.retry(lambda response: response)
 def get_recipe(city: str) -> str | None:
     weather: dict = services.weather.get_weather(city)
 
@@ -57,9 +57,7 @@ def get_recipe(city: str) -> str | None:
         humidity, temperature, weather_description, wind_speed
     )
 
-    completion: openai.types.chat.ChatCompletion = services.utils.retry(
-        openai_api_call, lambda response: response, openai_prompt
-    )
+    completion: openai.types.chat.ChatCompletion = openai_api_call(openai_prompt)
 
     return completion.choices[0].message.content
 

@@ -23,12 +23,13 @@ def weather_api_call(location) -> dict:
     return weather.json()
 
 
+@services.utils.retry(lambda response: response)
 def get_weather(location) -> dict:
-    return services.utils.retry(weather_api_call, lambda response: response, location)
-
+    return weather_api_call(location)
 
 if __name__ == "__main__":
     # print(check_city("London"))
-    print(get_weather("London"))
+    # print(get_weather("London"))
+    print(get_weather_deco('London'))
     # print(check_city("58913784137849318840134134"))
     # print(get_weather("58913784137849318840134134"))
